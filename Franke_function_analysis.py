@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 from random import random, seed
 from sklearn.model_selection import train_test_split
@@ -13,7 +11,6 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import mean_squared_error
 from sklearn import linear_model
-from sklearn.multioutput import MultiOutputRegressor
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 import pandas as pd
 from IPython.display import display
