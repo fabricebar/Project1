@@ -34,7 +34,7 @@ def FrankeFunction(x,y,e):
 
 # Makes the designmatrix using x and y as input also polydegree n.
 def dX(x,y,n):
-
+    
     if len(x.shape)>1:
         x=x.ravel()
         y=y.ravel()
@@ -45,7 +45,6 @@ def dX(x,y,n):
         q=int(i*(i+1)/2)
         for j in range(i+1):
             X[:,q+j]=(x**(i-j))*(y**j)
-
     return X
 
 # Makes the coefficents for OLS estimator.
@@ -79,7 +78,6 @@ def R2(y_data, y_model):
 # Plots the R2 and MSE as a function of polynimial degree.
 def plot_mse(n,t):
     p=np.arange(1,n+1,1)
-    print(p)
     mse_train=np.zeros(len(p))
     r2_train=np.zeros(len(p))
     mse_test=np.zeros(len(p))
@@ -91,7 +89,6 @@ def plot_mse(n,t):
     r22_test=np.zeros(len(p))
 
     z_shape=z.shape
-
     for i in range(len(p)):
         X=designmatrix(x,y,i+1)
         X2=dX(x,y,i+1)
@@ -130,8 +127,7 @@ def plot_mse(n,t):
             r22_train[i]=R2(Y_train,z2_tilde)
             mse2_test[i]=MSE(Y_test,z2_pred)
             r22_test[i]=R2(Y_test,z2_pred)
-            print(f"dette er i = {i}")
-
+            
         else:
             model1="Ridge"
 
@@ -213,7 +209,6 @@ def plot_lamda(n,t):
 
         X_train, X_test, Y_train, Y_test= train_test_split(X,Y,test_size=0.2,random_state=4)
 
-
         X_scaler = StandardScaler()
         X_scaler.fit(X_train)
         X_train = X_scaler.transform(X_train)
@@ -229,13 +224,11 @@ def plot_lamda(n,t):
         RegLasso = linear_model.Lasso(lamdas_lasso[i],fit_intercept=False)
         RegLasso.fit(X_train,Y_train)
 
-
         z_tilde=X_train@beta
         z_pred=X_test@beta
 
         z2_tilde=(RegLasso.predict(X_train))
         z2_pred=(RegLasso.predict(X_test))
-
 
         Rmse_train[i]=MSE(Y_train,z_tilde)
         Rr2_train[i]=R2(Y_train,z_tilde)
@@ -246,7 +239,6 @@ def plot_lamda(n,t):
         Lr2_train[i]=R2(Y_train,z2_tilde)
         Lmse_test[i]=MSE(Y_test,z2_pred)
         Lr2_test[i]=R2(Y_test,z2_pred)
-
 
     plt.plot(np.log10(lamdas_ridge),(Rmse_train),label="MSE_train")
     plt.plot(np.log10(lamdas_ridge),(Rmse_test),label="MSE_test")
@@ -285,7 +277,6 @@ def bootstrap(n,n_b):
     bootstraps=n_b
     mse_t=np.zeros(len(p))
     for i in range(len(p)):
-
         X=dX(x,y,i+1)
 
         X_train, X_test, Y_train, Y_test= train_test_split(X,Y,test_size=0.2)
@@ -312,9 +303,6 @@ def bootstrap(n,n_b):
         error[i]=np.mean( np.mean((Y_test[:,np.newaxis] - z_pred)**2, axis=1, keepdims=True) )
         bias[i]=np.mean( (Y_test[:,np.newaxis] - np.mean(z_pred, axis=1, keepdims=True))**2 )
         variance[i]=np.mean( np.var(z_pred, axis=1, keepdims=True) )
-
-        print(i)
-
 
     plt.plot(p,error,label="test error")
     plt.plot(p,bias, label="bias")
@@ -368,7 +356,6 @@ def CrossV(n,k,nlamdas,t):
             scores_KFold=np.array(scores_KFold)
             scores_KFold_train=np.array(scores_KFold_train)
 
-
             OLS = LinearRegression(fit_intercept=False)
             scores_sk_Kfold = cross_val_score(OLS, X, Y, scoring='neg_mean_squared_error', cv=kfold)
             estimated_mse_KFold[i] = np.mean(scores_KFold, axis = 0)
@@ -406,7 +393,6 @@ def CrossV(n,k,nlamdas,t):
                 Xtrain = X_scaler.transform(Xtrain)
                 Xtest = X_scaler.transform(Xtest)
 
-
                 Y_scaler = StandardScaler(with_std=False)
                 Y_scaler.fit(Ytrain.reshape(-1,1))
                 Ytrain = (Y_scaler.transform(Ytrain.reshape(-1,1))).ravel()
@@ -428,10 +414,7 @@ def CrossV(n,k,nlamdas,t):
             estimated_mse_KFold_train[i] = np.mean(scores_KFold_train, axis = 0)
             estimated_mse_sk_KFold[i] = np.mean(-scores_sk_Kfold , axis = 0)
 
-        print("scores_KFold")
-        print(scores_KFold_train)
-        print(estimated_mse_KFold_train)
-
+        
         plt.plot(np.log10(lamdas),(estimated_mse_KFold_train),label="train error")
         plt.plot(np.log10(lamdas),(estimated_mse_KFold_test),label="test error")
         plt.plot(np.log10(lamdas),(estimated_mse_sk_KFold),label="test error sk",linestyle=":")
@@ -469,7 +452,6 @@ def CrossV(n,k,nlamdas,t):
                 Ytrain = (Y_scaler.transform(Ytrain.reshape(-1,1))).ravel()
                 Ytest = (Y_scaler.transform(Ytest.reshape(-1,1))).ravel()
 
-
                 RegLasso = linear_model.Lasso(lamdas[i],fit_intercept=True)
                 RegLasso.fit(Xtrain,Ytrain)
 
@@ -488,9 +470,7 @@ def CrossV(n,k,nlamdas,t):
             estimated_mse_KFold_train[i] = np.mean(scores_KFold_train, axis = 0)
             estimated_mse_sk_KFold[i] = np.mean(-scores_sk_Kfold , axis = 0)
 
-        print("scores_KFold")
-        print(scores_KFold_train)
-        print(estimated_mse_KFold_train)
+
         plt.plot(np.log10(lamdas),(estimated_mse_KFold_train),label="train error")
         plt.plot(np.log10(lamdas),(estimated_mse_KFold_test),label="test error")
         plt.plot(np.log10(lamdas),(estimated_mse_sk_KFold),label="test error sk",linestyle=":")
@@ -543,8 +523,6 @@ def data_noise(N,e,n,t,n_b):
 
             mse2_train[i]=MSE(Y_train,z2_tilde)
             mse2_test[i]=MSE(Y_test,z2_pred)
-            print(f"dette er i = {i}")
-            print()
 
         plt.plot(e,(mse2_train),label="MSE_train")
         plt.plot(e,(mse2_test),label="MSE_test")
