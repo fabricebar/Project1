@@ -90,7 +90,6 @@ def plot_mse(n,t):
 
     z_shape=z.shape
     for i in range(len(p)):
-        X=designmatrix(x,y,i+1)
         X2=dX(x,y,i+1)
 
         X2_train, X2_test, Y_train, Y_test= train_test_split(X2,Y,test_size=0.2)
@@ -108,20 +107,11 @@ def plot_mse(n,t):
         if t==0:
             model1="OLS"
             model2="OLS X2"
-
-            b=beta_OLS(X_train,z_train)
+            
             b2=beta_OLS(X2_train,Y_train)
-
-            z_tilde=X_train@b
-            z_pred=X_test@b
 
             z2_tilde=(X2_train@b2)
             z2_pred=(X2_test@b2)
-
-            mse_train[i]=MSE(z_train,z_tilde)
-            r2_train[i]=R2(z_train,z_tilde)
-            mse_test[i]=MSE(z_test,z_pred)
-            r2_test[i]=R2(z_test,z_pred)
 
             mse2_train[i]=MSE(Y_train,z2_tilde)
             r22_train[i]=R2(Y_train,z2_tilde)
@@ -162,7 +152,6 @@ def plot_mse(n,t):
 
         data3={"β_OLS estimator":b}
         XPandas3 = pd.DataFrame(data3)
-
 
         print()
         print()
