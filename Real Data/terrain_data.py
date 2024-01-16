@@ -89,7 +89,6 @@ def plot_mse(n,t):
         Y_train = (Y_scaler.transform(Y_train.reshape(-1,1))).ravel()
         Y_test = (Y_scaler.transform(Y_test.reshape(-1,1))).ravel()
 
-
         if t==0:
             model1="OLS sklearn"
             model2="OLS own"
@@ -102,11 +101,6 @@ def plot_mse(n,t):
 
             z2_tilde=(X2_train@b2)
             z2_pred=(X2_test@b2)
-
-            print(X2_train)
-            print()
-            print(X2_test)
-
 
             mse2_train[i]=MSE(Y_train,z2_tilde)
             r22_train[i]=R2(Y_train,z2_tilde)
@@ -129,13 +123,11 @@ def plot_mse(n,t):
             RegLasso = linear_model.Lasso(t,fit_intercept=False)
             RegLasso.fit(X2_train,Y_train)
 
-
             z_tilde=X2_train@b2
             z_pred=X2_test@b2
 
             z2_tilde=(RegLasso.predict(X2_train))
             z2_pred=(RegLasso.predict(X2_test))
-
 
             mse_train[i]=MSE(Y_train,z_tilde)
             r2_train[i]=R2(Y_train,z_tilde)
@@ -202,13 +194,11 @@ def plot_lamda(n,t):
         RegLasso = linear_model.Lasso(lamdas_lasso[i],fit_intercept=False)
         RegLasso.fit(X_train,Y_train)
 
-
         z_tilde=X_train@beta
         z_pred=X_test@beta
 
         z2_tilde=(RegLasso.predict(X_train))
         z2_pred=(RegLasso.predict(X_test))
-
 
         Rmse_train[i]=MSE(Y_train,z_tilde)
         Rr2_train[i]=R2(Y_train,z_tilde)
@@ -290,7 +280,6 @@ def bootstrap(n,n_b):
 
         print(i)
 
-    print(variance)
     plt.plot(p,error,label="test error")
     plt.plot(p,bias, label="bias")
     plt.plot(p,variance, label="variance")
